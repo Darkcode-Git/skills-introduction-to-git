@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yahtzee Clásico – 2 Jugadores (Montecarlo)</title>
+    <link rel="stylesheet" href="yahtzee.css" />
+  </head>
+  <body>
+
+    <header>
+      <h1>🎲 Yahtzee Clásico</h1>
+      <p class="subtitle">Simulación Montecarlo · Distribución Uniforme · 2 Jugadores</p>
+    </header>
+
+    <div class="game-wrapper">
+
+      <!-- ===================== PLAY AREA ===================== -->
+      <section class="play-area">
+
+        <div class="player-turn" id="currentPlayer">Player 1's Turn</div>
+
+        <!-- Five dice -->
+        <div class="dice-row">
+          <div class="die unrolled" id="die-0">?</div>
+          <div class="die unrolled" id="die-1">?</div>
+          <div class="die unrolled" id="die-2">?</div>
+          <div class="die unrolled" id="die-3">?</div>
+          <div class="die unrolled" id="die-4">?</div>
+        </div>
+        <p class="legend">Click a die after rolling to keep it</p>
+
+        <!-- Roll button -->
+        <div class="roll-area">
+          <button id="rollBtn">🎲 Roll</button>
+          <div class="rolls-info">
+            Rolls remaining: <span id="rollsLeft">3</span>
+          </div>
+        </div>
+
+        <!-- Score options for current turn -->
+        <div class="score-options">
+          <h3>Select a Category to Score</h3>
+          <table>
+            <tbody>
+              <!-- Upper section -->
+              <tr class="section-header"><td colspan="2">▲ Upper Section</td></tr>
+              <tr><td>Ones</td>          <td><span class="score-option-cell" id="opt-ones">—</span></td></tr>
+              <tr><td>Twos</td>          <td><span class="score-option-cell" id="opt-twos">—</span></td></tr>
+              <tr><td>Threes</td>        <td><span class="score-option-cell" id="opt-threes">—</span></td></tr>
+              <tr><td>Fours</td>         <td><span class="score-option-cell" id="opt-fours">—</span></td></tr>
+              <tr><td>Fives</td>         <td><span class="score-option-cell" id="opt-fives">—</span></td></tr>
+              <tr><td>Sixes</td>         <td><span class="score-option-cell" id="opt-sixes">—</span></td></tr>
+              <!-- Lower section -->
+              <tr class="section-header"><td colspan="2">▼ Lower Section</td></tr>
+              <tr><td>Three of a Kind</td>  <td><span class="score-option-cell" id="opt-threeOfAKind">—</span></td></tr>
+              <tr><td>Four of a Kind</td>   <td><span class="score-option-cell" id="opt-fourOfAKind">—</span></td></tr>
+              <tr><td>Full House (25)</td>  <td><span class="score-option-cell" id="opt-fullHouse">—</span></td></tr>
+              <tr><td>Sm. Straight (30)</td><td><span class="score-option-cell" id="opt-smallStraight">—</span></td></tr>
+              <tr><td>Lg. Straight (40)</td><td><span class="score-option-cell" id="opt-largeStraight">—</span></td></tr>
+              <tr><td>YAHTZEE! (50)</td>    <td><span class="score-option-cell" id="opt-yahtzee">—</span></td></tr>
+              <tr><td>Chance</td>           <td><span class="score-option-cell" id="opt-chance">—</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+
+      <!-- ===================== SCOREBOARD ===================== -->
+      <section class="scoreboard">
+        <h2>📋 Scorecard</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th class="player-header">Player 1</th>
+              <th class="player-header">Player 2</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Upper section -->
+            <tr class="section-row"><td colspan="3">▲ Upper Section</td></tr>
+            <tr><td class="cat-name">Ones</td>
+                <td id="score-p0-ones"></td>
+                <td id="score-p1-ones"></td></tr>
+            <tr><td class="cat-name">Twos</td>
+                <td id="score-p0-twos"></td>
+                <td id="score-p1-twos"></td></tr>
+            <tr><td class="cat-name">Threes</td>
+                <td id="score-p0-threes"></td>
+                <td id="score-p1-threes"></td></tr>
+            <tr><td class="cat-name">Fours</td>
+                <td id="score-p0-fours"></td>
+                <td id="score-p1-fours"></td></tr>
+            <tr><td class="cat-name">Fives</td>
+                <td id="score-p0-fives"></td>
+                <td id="score-p1-fives"></td></tr>
+            <tr><td class="cat-name">Sixes</td>
+                <td id="score-p0-sixes"></td>
+                <td id="score-p1-sixes"></td></tr>
+            <tr class="bonus-row">
+              <td class="cat-name">Upper Bonus (+35 if ≥63)</td>
+              <td id="score-p0-upperBonus"></td>
+              <td id="score-p1-upperBonus"></td>
+            </tr>
+            <!-- Lower section -->
+            <tr class="section-row"><td colspan="3">▼ Lower Section</td></tr>
+            <tr><td class="cat-name">Three of a Kind</td>
+                <td id="score-p0-threeOfAKind"></td>
+                <td id="score-p1-threeOfAKind"></td></tr>
+            <tr><td class="cat-name">Four of a Kind</td>
+                <td id="score-p0-fourOfAKind"></td>
+                <td id="score-p1-fourOfAKind"></td></tr>
+            <tr><td class="cat-name">Full House (25)</td>
+                <td id="score-p0-fullHouse"></td>
+                <td id="score-p1-fullHouse"></td></tr>
+            <tr><td class="cat-name">Small Straight (30)</td>
+                <td id="score-p0-smallStraight"></td>
+                <td id="score-p1-smallStraight"></td></tr>
+            <tr><td class="cat-name">Large Straight (40)</td>
+                <td id="score-p0-largeStraight"></td>
+                <td id="score-p1-largeStraight"></td></tr>
+            <tr><td class="cat-name">YAHTZEE! (50)</td>
+                <td id="score-p0-yahtzee"></td>
+                <td id="score-p1-yahtzee"></td></tr>
+            <tr><td class="cat-name">Chance</td>
+                <td id="score-p0-chance"></td>
+                <td id="score-p1-chance"></td></tr>
+            <!-- Totals -->
+            <tr class="total-row">
+              <td class="cat-name">Grand Total</td>
+              <td id="score-p0-total">0</td>
+              <td id="score-p1-total">0</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+    </div><!-- .game-wrapper -->
+
+    <!-- ===================== GAME OVER OVERLAY ===================== -->
+    <div class="game-over-overlay" id="gameOverOverlay">
+      <div class="game-over-box">
+        <h2>🎉 Game Over!</h2>
+        <div class="scores-final">
+          Player 1: <strong id="finalScore0">0</strong> pts<br/>
+          Player 2: <strong id="finalScore1">0</strong> pts
+        </div>
+        <div class="winner" id="winnerMessage"></div>
+        <button onclick="location.reload()">🔄 Play Again</button>
+      </div>
+    </div>
+
+    <script src="yahtzee.js"></script>
+  </body>
+</html>
